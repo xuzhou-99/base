@@ -1,4 +1,4 @@
-package com.qingyan.base.util.uuid;
+package cn.altaria.base.util.uuid;
 
 import java.util.UUID;
 

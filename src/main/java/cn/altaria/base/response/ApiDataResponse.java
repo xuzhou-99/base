@@ -1,4 +1,4 @@
-package com.qingyan.base.response;
+package cn.altaria.base.response;
 
 import java.io.Serializable;
 
@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-import static com.qingyan.base.response.ResponseStatus.FAIL;
-import static com.qingyan.base.response.ResponseStatus.SUCCESS;
-import static com.qingyan.base.response.ResponseStatus.UNKNOWN_ERROR;
+import static cn.altaria.base.response.ResponseStatus.FAIL;
+import static cn.altaria.base.response.ResponseStatus.SUCCESS;
+import static cn.altaria.base.response.ResponseStatus.UNKNOWN_ERROR;
 
 
 /**

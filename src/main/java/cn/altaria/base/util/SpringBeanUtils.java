@@ -1,4 +1,4 @@
-package com.qingyan.base.util;
+package cn.altaria.base.util;
 
 import java.util.Map;
 

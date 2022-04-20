@@ -1,4 +1,4 @@
-package com.qingyan.base.response;
+package cn.altaria.base.response;
 
 import java.io.Serializable;
 
@@ -7,8 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static com.qingyan.base.response.ResponseStatus.FAIL;
-import static com.qingyan.base.response.ResponseStatus.SUCCESS;
+import static cn.altaria.base.response.ResponseStatus.FAIL;
+import static cn.altaria.base.response.ResponseStatus.SUCCESS;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.qingyan.base.util.mail;
+package cn.altaria.base.util.mail;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
@@ -13,9 +13,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ObjectUtils;
 
 /**
  * MailUtil

@@ -1,4 +1,4 @@
-package com.qingyan.base.util;
+package cn.altaria.base.util;
 
 
 import java.net.InetAddress;
@@ -13,7 +13,11 @@ import javax.servlet.http.HttpServletRequest;
  * @version v1.0.0
  * @date 2022/2/10 11:24
  */
-public class RequestUtils {
+public final class RequestUtils {
+
+    private RequestUtils() {
+
+    }
 
     /**
      * 本地机器Ip
@@ -74,6 +78,23 @@ public class RequestUtils {
             ip = ip.substring(0, ip.indexOf(","));
         }
         return ip;
+    }
+
+    /**
+     * 通过请求获取对应的Ip
+     *
+     * @param request 请求
+     * @return Ip
+     */
+    public static String getUserAgent(HttpServletRequest request) {
+
+        String userAgent = "";
+
+        if (null != request) {
+            // 获取 user-agent
+            userAgent = request.getHeader("user-agent");
+        }
+        return userAgent;
     }
 
     /**

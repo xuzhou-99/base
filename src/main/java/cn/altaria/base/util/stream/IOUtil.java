@@ -1,4 +1,4 @@
-package com.qingyan.base.util.stream;
+package cn.altaria.base.util.stream;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -8,7 +8,7 @@ import java.util.Base64;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Base64Utils;
+
 
 /**
  * IOUtil
@@ -75,7 +75,7 @@ public class IOUtil {
     public static InputStream baseToInputStream(String base64string) {
         ByteArrayInputStream stream = null;
         try {
-            byte[] bytes = Base64Utils.decodeFromString(base64string);
+            byte[] bytes = Base64.getDecoder().decode(base64string);
             stream = new ByteArrayInputStream(bytes);
         } catch (Exception e) {
             log.error("base64转化为输入流失败");

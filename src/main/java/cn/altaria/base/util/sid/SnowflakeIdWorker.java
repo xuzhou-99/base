@@ -1,4 +1,4 @@
-package com.qingyan.base.util.sid;
+package cn.altaria.base.util.sid;
 
 /**
  * SnowflakeIdWorker

@@ -1,4 +1,4 @@
-package com.qingyan.base.http;
+package cn.altaria.base.http;
 
 /**
  * http请求返回对象

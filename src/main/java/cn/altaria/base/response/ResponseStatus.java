@@ -1,4 +1,4 @@
-package com.qingyan.base.response;
+package cn.altaria.base.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

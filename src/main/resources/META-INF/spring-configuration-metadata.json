@@ -4,49 +4,49 @@
       "name": "http.client.connect-timeout",
       "type": "java.lang.Integer",
       "description": "返回从连接管理器请求连接时使用的超时时间（以毫秒为单位）。 默认值： -1，为无限超时.",
-      "sourceType": "com.qingyan.base.http.config.HttpClientConfig"
+      "sourceType": "cn.altaria.base.http.config.HttpClientConfig"
     },
     {
       "name": "http.client.connection-request-timeout",
       "type": "java.lang.Integer",
       "description": "连接超时：连接一个url的连接等待时间 确定建立连接之前的超时时间（以毫秒为单位）。 默认值： -1，为无限超时.",
-      "sourceType": "com.qingyan.base.http.config.HttpClientConfig"
+      "sourceType": "cn.altaria.base.http.config.HttpClientConfig"
     },
     {
       "name": "http.client.socket-timeout",
       "type": "java.lang.Integer",
       "description": "读取数据超时：连上url，获取response的返回等待时间 以毫秒为单位定义套接字超时，它是等待数据的超时，或者换句话说，两个连续数据包之间的最长不活动时间。 默认值： -1，为无限超时.",
-      "sourceType": "com.qingyan.base.http.config.HttpClientConfig"
+      "sourceType": "cn.altaria.base.http.config.HttpClientConfig"
     },
     {
       "name": "http.client.max-pre-route",
       "type": "java.lang.Integer",
       "description": "客户端每个路由最高链接最大数.",
-      "sourceType": "com.qingyan.base.http.config.HttpClientConfig"
+      "sourceType": "cn.altaria.base.http.config.HttpClientConfig"
     },
     {
       "name": "http.client.max-total",
       "type": "java.lang.Integer",
       "description": "客户端总并行链接最大数.",
-      "sourceType": "com.qingyan.base.http.config.HttpClientConfig"
+      "sourceType": "cn.altaria.base.http.config.HttpClientConfig"
     },
     {
       "name": "http.client.connection-time-to-live",
       "type": "java.lang.Long",
       "description": "连接存活时长：秒.",
-      "sourceType": "com.qingyan.base.http.config.HttpClientConfig"
+      "sourceType": "cn.altaria.base.http.config.HttpClientConfig"
     },
     {
       "name": "http.client.retry-count",
       "type": "java.lang.Integer",
       "description": "重试尝试最大次数 默认为 3 .",
-      "sourceType": "com.qingyan.base.http.config.HttpClientConfig"
+      "sourceType": "cn.altaria.base.http.config.HttpClientConfig"
     },
     {
       "name": "http.client.request-sent-retry-enabled",
       "type": "java.lang.Boolean",
       "description": "非幂等请求是否可以重试 默认不开启.",
-      "sourceType": "com.qingyan.base.http.config.HttpClientConfig"
+      "sourceType": "cn.altaria.base.http.config.HttpClientConfig"
     }
   ]
 }

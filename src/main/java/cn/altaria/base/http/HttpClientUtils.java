@@ -1,4 +1,4 @@
-package com.qingyan.base.http;
+package cn.altaria.base.http;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHeaders;
 import org.apache.http.NameValuePair;
@@ -34,10 +35,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ObjectUtils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.qingyan.base.http.config.HttpClientConfig;
+
+import cn.altaria.base.http.config.HttpClientConfig;
 
 /**
  * http连接工具

@@ -1,6 +1,7 @@
-package com.qingyan.base.http.config;
+package cn.altaria.base.http.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * HttpClientProperties
@@ -9,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @version v1.0.0
  * @create 2021/7/22 16:35
  */
+@Component
 @ConfigurationProperties(prefix = "http.client")
 public class HttpClientConfig {
     /**
