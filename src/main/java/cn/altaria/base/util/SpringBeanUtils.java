@@ -1,8 +1,9 @@
 package cn.altaria.base.util;
 
-import java.util.Map;
-
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -15,63 +16,49 @@ import lombok.NoArgsConstructor;
  * @version v1.0.0
  * @date 2021/7/22 17:10
  */
+@Component
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SpringBeanUtils {
+public class SpringBeanUtils implements ApplicationContextAware {
 
-    private static final SpringBeanUtils INSTANCE = new SpringBeanUtils();
+    private static ApplicationContext applicationContext = null;
 
-    private ConfigurableApplicationContext context;
-
-    /**
-     * get SpringBeanUtils INSTANCE
-     *
-     * @return SpringBeanUtils
-     */
-    public static SpringBeanUtils getInstance() {
-        return INSTANCE;
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        if (SpringBeanUtils.applicationContext == null) {
+            SpringBeanUtils.applicationContext = applicationContext;
+        }
     }
 
     /**
-     * set ConfigurableApplicationContext
-     *
-     * @param context ConfigurableApplicationContext
+     * @apiNote 获取applicationContext
+     * @author hongsir 2017/11/3 19:40:00
      */
-    public void setContext(ConfigurableApplicationContext context) {
-        this.context = context;
-    }
-
-
-    /**
-     * acquire spring bean
-     *
-     * @param requiredType class
-     * @param <T>          type
-     * @return bean bean
-     */
-    public <T> T getBean(final Class<T> requiredType) {
-        return context.getBean(requiredType);
+    public static ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 
     /**
-     * acquire spring bean
-     *
-     * @param name         bean name
-     * @param requiredType class
-     * @param <T>          type
-     * @return bean
+     * @apiNote 通过name获取 Bean.
+     * @author hongsir 2017/11/3 19:39:00
      */
-    public <T> T getBean(final String name, final Class<T> requiredType) {
-        return context.getBean(name, requiredType);
+    public static Object getBean(String name) {
+        return getApplicationContext().getBean(name);
     }
 
     /**
-     * acquire spring beans
-     *
-     * @param requiredType class
-     * @param <T>          type
-     * @return {@linkplain Map}
+     * @apiNote 通过class获取Bean.
+     * @author hongsir 2017/11/3 19:39:00
      */
-    public <T> Map<String, T> getBeansOfType(final Class<T> requiredType) {
-        return context.getBeansOfType(requiredType);
+    public static <T> T getBean(Class<T> clazz) {
+        return getApplicationContext().getBean(clazz);
     }
+
+    /**
+     * @apiNote 通过name, 以及Clazz返回指定的Bean
+     * @author hongsir 2017/11/3 19:39:00
+     */
+    public static <T> T getBean(String name, Class<T> clazz) {
+        return getApplicationContext().getBean(name, clazz);
+    }
+
 }

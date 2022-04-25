@@ -23,7 +23,7 @@ public class ConfigUtil {
      */
     public static Environment getEnvironment() {
         if (env == null) {
-            env = SpringBeanUtils.getInstance().getBean(Environment.class);
+            env = SpringBeanUtils.getBean(Environment.class);
         }
         return env;
     }
