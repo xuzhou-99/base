@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.altaria.base.http.config.HttpClientConfig;
+import cn.altaria.base.util.SpringBeanUtils;
 
 /**
  * http连接工具
@@ -78,7 +79,7 @@ public class HttpClientUtils {
 
     static {
         // 配置类
-        HTTP_CLIENT_CONFIG = new HttpClientConfig();
+        HTTP_CLIENT_CONFIG = SpringBeanUtils.getBean(HttpClientConfig.class);
 
         // 配置请求参数，请求时常，连接市场，读取数据时长
         request_config = RequestConfig.custom()
