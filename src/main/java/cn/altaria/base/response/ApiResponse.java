@@ -7,16 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static cn.altaria.base.response.ResponseStatus.FAIL;
-import static cn.altaria.base.response.ResponseStatus.SUCCESS;
-
 
 /**
  * ApiResponse
  *
  * @author xuzhou
  * @version v1.0.0
- * @date 2021/5/11 13:53
+ * @create 2021/5/11 13:53
  */
 @Getter
 @ToString
@@ -51,7 +48,7 @@ public class ApiResponse implements Serializable {
      * @return {@link ApiResponse}
      */
     public static ApiResponse ofSuccess() {
-        return of(SUCCESS.getSuccess(), SUCCESS.getCode(), SUCCESS.getMessage());
+        return of(ResponseStatus.SUCCESS.getSuccess(), ResponseStatus.SUCCESS.getCode(), ResponseStatus.SUCCESS.getMessage());
     }
 
     /**
@@ -61,7 +58,7 @@ public class ApiResponse implements Serializable {
      * @return {@link ApiResponse}
      */
     public static ApiResponse ofSuccess(String message) {
-        return of(SUCCESS.getSuccess(), SUCCESS.getCode(), message);
+        return of(ResponseStatus.SUCCESS.getSuccess(), ResponseStatus.SUCCESS.getCode(), message);
     }
 
     /**
@@ -70,7 +67,7 @@ public class ApiResponse implements Serializable {
      * @return {@link ApiResponse}
      */
     public static ApiResponse ofFail() {
-        return of(FAIL.getSuccess(), FAIL.getCode(), FAIL.getMessage());
+        return of(ResponseStatus.FAIL.getSuccess(), ResponseStatus.FAIL.getCode(), ResponseStatus.FAIL.getMessage());
     }
 
     /**
@@ -80,7 +77,7 @@ public class ApiResponse implements Serializable {
      * @return {@link ApiResponse}
      */
     public static ApiResponse ofFail(String message) {
-        return of(FAIL.getSuccess(), FAIL.getCode(), message);
+        return of(ResponseStatus.FAIL.getSuccess(), ResponseStatus.FAIL.getCode(), message);
     }
 
     /**
@@ -91,7 +88,7 @@ public class ApiResponse implements Serializable {
      * @return {@link ApiResponse}
      */
     public static ApiResponse ofFail(final Integer code, final String message) {
-        return of(FAIL.getSuccess(), code, message);
+        return of(ResponseStatus.FAIL.getSuccess(), code, message);
     }
 
     /**

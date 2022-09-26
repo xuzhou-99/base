@@ -6,17 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-import static cn.altaria.base.response.ResponseStatus.FAIL;
-import static cn.altaria.base.response.ResponseStatus.SUCCESS;
-import static cn.altaria.base.response.ResponseStatus.UNKNOWN_ERROR;
-
 
 /**
  * ApiDataResponse
  *
  * @author xuzhou
  * @version v1.0.0
- * @date 2021/5/11 14:12
+ * @create 2021/5/11 14:12
  */
 @Getter
 @ToString
@@ -63,7 +59,19 @@ public class ApiDataResponse<T> extends ApiResponse implements Serializable {
      * @return 封装结果
      */
     public static <T> ApiDataResponse<T> ofSuccess(T data) {
-        return of(SUCCESS.getSuccess(), SUCCESS.getCode(), SUCCESS.getMessage(), data);
+        return of(ResponseStatus.SUCCESS.getSuccess(), ResponseStatus.SUCCESS.getCode(), ResponseStatus.SUCCESS.getMessage(), data);
+    }
+
+    /**
+     * 通用返回结果封装-操作成功
+     *
+     * @param message 消息
+     * @param data    数据
+     * @param <T>     数据类型
+     * @return 封装结果
+     */
+    public static <T> ApiDataResponse<T> ofSuccess(final String message, T data) {
+        return of(ResponseStatus.SUCCESS.getSuccess(), ResponseStatus.SUCCESS.getCode(), message, data);
     }
 
     /**
@@ -73,7 +81,7 @@ public class ApiDataResponse<T> extends ApiResponse implements Serializable {
      * @return 封装结果
      */
     public static <T> ApiDataResponse<T> ofError() {
-        return of(FAIL.getSuccess(), FAIL.getCode(), FAIL.getMessage(), null);
+        return of(ResponseStatus.FAIL.getSuccess(), ResponseStatus.FAIL.getCode(), ResponseStatus.FAIL.getMessage(), null);
     }
 
     /**
@@ -84,7 +92,7 @@ public class ApiDataResponse<T> extends ApiResponse implements Serializable {
      * @return 封装结果
      */
     public static <T> ApiDataResponse<T> ofError(final String message) {
-        return of(FAIL.getSuccess(), FAIL.getCode(), message, null);
+        return of(ResponseStatus.FAIL.getSuccess(), ResponseStatus.FAIL.getCode(), message, null);
     }
 
     /**
@@ -96,7 +104,7 @@ public class ApiDataResponse<T> extends ApiResponse implements Serializable {
      * @return 封装结果
      */
     public static <T> ApiDataResponse<T> ofError(final Integer code, final String message) {
-        return of(FAIL.getSuccess(), code, message, null);
+        return of(ResponseStatus.FAIL.getSuccess(), code, message, null);
     }
 
     /**
@@ -107,6 +115,6 @@ public class ApiDataResponse<T> extends ApiResponse implements Serializable {
      * @return 封装结果
      */
     public static <E extends Exception> ApiDataResponse<Object> ofError(final E e, final Object data) {
-        return of(UNKNOWN_ERROR.getSuccess(), UNKNOWN_ERROR.getCode(), e.getMessage(), data);
+        return of(ResponseStatus.UNKNOWN_ERROR.getSuccess(), ResponseStatus.UNKNOWN_ERROR.getCode(), e.getMessage(), data);
     }
 }
