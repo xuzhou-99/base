@@ -12,7 +12,7 @@
 
     <groupId>cn.altaria</groupId>
     <artifactId>base</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>base</name>
     <description>base is a base package written in Java</description>
 
