@@ -16,14 +16,14 @@ public abstract class AbstractSpringBeanGatherDefinition {
      *
      * @return 自定义类集合
      */
-    Set<Class<?>> loadBean() {
+    public Set<Class<?>> loadBean() {
         return Collections.emptySet();
     }
 
     /**
      * 自定义系统初始化事件
      */
-    void loadEvent() {
+    public void loadEvent() {
 
     }
 }
