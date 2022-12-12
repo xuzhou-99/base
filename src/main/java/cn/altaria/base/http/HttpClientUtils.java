@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.altaria.base.http.config.HttpClientConfig;
-import cn.altaria.base.util.SpringBeanUtils;
+import cn.altaria.base.spring.SpringBeanUtils;
 
 /**
  * http连接工具
@@ -82,11 +82,7 @@ public class HttpClientUtils {
         HTTP_CLIENT_CONFIG = SpringBeanUtils.getBean(HttpClientConfig.class);
 
         // 配置请求参数，请求时常，连接市场，读取数据时长
-        request_config = RequestConfig.custom()
-                .setConnectTimeout(HTTP_CLIENT_CONFIG.getConnectTimeout())
-                .setConnectionRequestTimeout(HTTP_CLIENT_CONFIG.getConnectionRequestTimeout())
-                .setSocketTimeout(HTTP_CLIENT_CONFIG.getSocketTimeout())
-                .build();
+        request_config = RequestConfig.custom().setConnectTimeout(HTTP_CLIENT_CONFIG.getConnectTimeout()).setConnectionRequestTimeout(HTTP_CLIENT_CONFIG.getConnectionRequestTimeout()).setSocketTimeout(HTTP_CLIENT_CONFIG.getSocketTimeout()).build();
 
         // 配置连接池关联
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
@@ -94,16 +90,13 @@ public class HttpClientUtils {
         connectionManager.setDefaultMaxPerRoute(HTTP_CLIENT_CONFIG.getMaxPreRoute());
 
         // 初始化客户端
-        httpClient = HttpClients.custom()
-                .setConnectionManager(connectionManager)
-                .setDefaultRequestConfig(request_config)
+        httpClient = HttpClients.custom().setConnectionManager(connectionManager).setDefaultRequestConfig(request_config)
                 // 重试机制
                 .setRetryHandler(new DefaultHttpRequestRetryHandler(HTTP_CLIENT_CONFIG.getRetryCount(), HTTP_CLIENT_CONFIG.isRequestSentRetryEnabled()))
                 // 开启后台线程清除过期的连接
                 .evictExpiredConnections()
                 // 开启后台线程清除闲置的连接
-                .evictIdleConnections(HTTP_CLIENT_CONFIG.getConnectionTimeToLive(), TimeUnit.SECONDS)
-                .build();
+                .evictIdleConnections(HTTP_CLIENT_CONFIG.getConnectionTimeToLive(), TimeUnit.SECONDS).build();
     }
 
     private HttpClientUtils() {
@@ -312,8 +305,7 @@ public class HttpClientUtils {
         // 执行http请求
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             // 构建返回实体
-            return new HttpResult(response.getStatusLine().getStatusCode(),
-                    EntityUtils.toString(response.getEntity()));
+            return new HttpResult(response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity()));
         } catch (Exception e) {
             log.error("http 请求异常", e);
         }
@@ -359,8 +351,7 @@ public class HttpClientUtils {
      * @param httpMethod 请求方式
      * @throws UnsupportedEncodingException 不支持字符编码异常
      */
-    private static void packageParam(Map<String, Object> params, HttpEntityEnclosingRequest httpMethod)
-            throws UnsupportedEncodingException {
+    private static void packageParam(Map<String, Object> params, HttpEntityEnclosingRequest httpMethod) throws UnsupportedEncodingException {
 
         if (MapUtils.isNotEmpty(params)) {
             List<NameValuePair> nameValuePairs = convertParams2NVPS(params);

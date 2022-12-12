@@ -1,4 +1,4 @@
-package cn.altaria.base.util;
+package cn.altaria.base.spring;
 
 import org.springframework.core.env.Environment;
 
