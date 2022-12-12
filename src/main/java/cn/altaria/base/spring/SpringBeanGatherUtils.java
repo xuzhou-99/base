@@ -51,7 +51,7 @@ public class SpringBeanGatherUtils implements ApplicationListener<ContextRefresh
 
     /**
      * 加载所有需要放入定制Bean容器集合的类
-     * 通过{@link ISpringBeanGatherDefinition#loadBean()}，放入类Set集合
+     * 通过{@link AbstractSpringBeanGatherDefinition#loadBean()}，放入类Set集合
      *
      * @param context Spring上下文
      */
@@ -62,7 +62,7 @@ public class SpringBeanGatherUtils implements ApplicationListener<ContextRefresh
         }
         log.info("开始系统定义Bean容器集合初始化...");
         // 自定义加载类
-        ISpringBeanGatherDefinition gatherDefinition = context.getBean(ISpringBeanGatherDefinition.class);
+        AbstractSpringBeanGatherDefinition gatherDefinition = context.getBean(AbstractSpringBeanGatherDefinition.class);
         if (gatherDefinition == null) {
             return;
         }
@@ -82,7 +82,7 @@ public class SpringBeanGatherUtils implements ApplicationListener<ContextRefresh
 
     /**
      * 加载系统初始化任务
-     * {@link ISpringBeanGatherDefinition#loadEvent()}
+     * {@link AbstractSpringBeanGatherDefinition#loadEvent()}
      *
      * @param context Spring上下文
      */
@@ -93,7 +93,7 @@ public class SpringBeanGatherUtils implements ApplicationListener<ContextRefresh
         }
         log.info("开始系统定义初始化事件执行...");
         // 自定义加载类
-        ISpringBeanGatherDefinition gatherDefinition = context.getBean(ISpringBeanGatherDefinition.class);
+        AbstractSpringBeanGatherDefinition gatherDefinition = context.getBean(AbstractSpringBeanGatherDefinition.class);
         if (gatherDefinition == null) {
             return;
         }

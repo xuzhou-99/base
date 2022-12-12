@@ -9,7 +9,7 @@ import java.util.Set;
  *
  * @author 许周
  */
-public abstract class ISpringBeanGatherDefinition {
+public abstract class AbstractSpringBeanGatherDefinition {
 
     /**
      * 自定义所有需要加载到Bean集合中的类

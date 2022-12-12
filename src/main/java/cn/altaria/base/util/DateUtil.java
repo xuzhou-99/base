@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author xuzhou
  * @version v1.0.0
- * @date 2021/8/16 20:33
+ * @since 2021/8/16 20:33
  */
 public class DateUtil {
 
@@ -32,6 +32,15 @@ public class DateUtil {
     private static final int DATE_COMPONENT_NUM = 3;
     static String[] chinese = new String[]{"〇", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
     static String[] number = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+
+    private static final String CHINESE_TEN = "十";
+
+    private static final String CHINESE_TWENTY = "二十";
+
+    private static final String CHINESE_THIRTY = "三十";
+
+    private DateUtil() {
+    }
 
     /**
      * 中文日期转为数字
@@ -64,18 +73,18 @@ public class DateUtil {
         }
 
         String day = split[2];
-        if ("十".equals(day)) {
+        if (CHINESE_TEN.equals(day)) {
             day = "10";
-        } else if ("二十".equals(day)) {
+        } else if (CHINESE_TWENTY.equals(day)) {
             day = "20";
-        } else if ("三十".equals(day)) {
+        } else if (CHINESE_THIRTY.equals(day)) {
             day = "30";
         } else {
             if (day.length() == 2) {
                 day = day.replace(chinese[10], number[1]);
             }
             if (day.length() == 3) {
-                day = day.replace("二十", number[2]).replace("三十", number[3]);
+                day = day.replace(CHINESE_TWENTY, number[2]).replace(CHINESE_THIRTY, number[3]);
             }
             for (int i = 1; i < chinese.length; i++) {
                 day = day.replace(chinese[i], number[i]);
@@ -112,10 +121,8 @@ public class DateUtil {
         }
 
         String month = split[1];
-        if (month.length() == 2) {
-            if (month.startsWith(number[0])) {
-                month = month.substring(1);
-            }
+        if (month.length() == 2 && month.startsWith(number[0])) {
+            month = month.substring(1);
         }
         month = chinese[Integer.parseInt(month)];
 
@@ -147,8 +154,8 @@ public class DateUtil {
     /**
      * 获得某天结束时间 2020-02-19 23:59:59
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 日期对应结束时间 yyyy-MM-dd 23:59:59
      */
     public static Date getEndOfDay(Date date) {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
@@ -159,8 +166,8 @@ public class DateUtil {
     /**
      * 获得某天开始时间 2020-02-17 00:00:00
      *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 日期开始时间 2020-02-17 00:00:00
      */
     public static Date getStartOfDay(Date date) {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
@@ -171,11 +178,11 @@ public class DateUtil {
     /**
      * 切割時間段
      *
-     * @param dateType 交易類型 M/D/H/N -->每月/每天/每小時/每分鐘
+     * @param dateType 切割类型 M/D/H/N -->每月/每天/每小時/每分鐘
      * @param start    yyyy-MM-dd HH:mm:ss
      * @param end      yyyy-MM-dd HH:mm:ss
      * @param fixRate  表示间隔天数，即多少天为一组
-     * @return
+     * @return 时间段
      */
     public static List<String> cutDate(String dateType, String start, String end, int fixRate) {
         try {
