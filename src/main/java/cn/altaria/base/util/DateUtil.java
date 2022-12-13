@@ -30,14 +30,11 @@ public class DateUtil {
      * 日期组成部分：年、月、日
      */
     private static final int DATE_COMPONENT_NUM = 3;
+    private static final String CHINESE_TEN = "十";
+    private static final String CHINESE_TWENTY = "二十";
+    private static final String CHINESE_THIRTY = "三十";
     static String[] chinese = new String[]{"〇", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
     static String[] number = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
-
-    private static final String CHINESE_TEN = "十";
-
-    private static final String CHINESE_TWENTY = "二十";
-
-    private static final String CHINESE_THIRTY = "三十";
 
     private DateUtil() {
     }

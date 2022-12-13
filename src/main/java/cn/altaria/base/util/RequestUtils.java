@@ -15,15 +15,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 public final class RequestUtils {
 
-    private RequestUtils() {
-
-    }
-
     /**
      * 本地机器Ip
      */
     private static final String LOCALHOST = "127.0.0.1";
-
     /**
      * 定义获取 ip 的 header
      */
@@ -41,6 +36,9 @@ public final class RequestUtils {
             "REMOTE_ADDR"
     };
 
+    private RequestUtils() {
+
+    }
 
     /**
      * 通过请求获取对应的Ip
