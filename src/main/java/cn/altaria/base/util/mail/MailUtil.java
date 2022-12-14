@@ -2,6 +2,7 @@ package cn.altaria.base.util.mail;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -20,6 +21,8 @@ import javax.mail.internet.MimeUtility;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sun.mail.util.MailSSLSocketFactory;
 
 /**
  * MailUtil
@@ -430,9 +433,17 @@ public class MailUtil {
         //                  QQ邮箱的SMTP(SLL)端口为465或587, 其他邮箱自行去查看)
 
         if (ssl) {
-            props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            props.setProperty("mail.smtp.socketFactory.fallback", "false");
-            props.setProperty("mail.smtp.socketFactory.port", port);
+            //使用SSL，企业邮箱必需
+            //开启安全协议
+            MailSSLSocketFactory sf = null;
+            try {
+                sf = new MailSSLSocketFactory();
+                sf.setTrustAllHosts(true);
+            } catch (GeneralSecurityException e1) {
+                e1.printStackTrace();
+            }
+            props.put("mail.smtp.ssl.enable", "true");
+            props.put("mail.smtp.ssl.socketFactory", sf);
         }
 
         return Session.getInstance(props, getAuthenticator(username, password));
