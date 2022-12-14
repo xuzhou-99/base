@@ -43,13 +43,22 @@ public class MailUtil {
     private static Authenticator authenticator;
     private static Session session;
 
+    private static final MailAcount GlobalMailAccount;
+
     static {
         emailConfig = new EmailConfig();
         session = getSession();
+        GlobalMailAccount = new MailAcount();
+        GlobalMailAccount.setUsername(emailConfig.getUsername());
+        GlobalMailAccount.setPassword(emailConfig.getPassword());
     }
 
     private MailUtil() {
 
+    }
+
+    public static MailAcount getGlobalMailAccount() {
+        return GlobalMailAccount;
     }
 
     /**
@@ -226,9 +235,9 @@ public class MailUtil {
      * @param message 邮件
      */
     public static void sendEmail(Session session, Message message) {
-
-        try (Transport transport = session.getTransport()) {
-
+        Transport transport = null;
+        try {
+            transport = session.getTransport();
             transport.connect();
             transport.sendMessage(message, message.getAllRecipients());
 
@@ -237,6 +246,14 @@ public class MailUtil {
         } catch (MessagingException e) {
             e.printStackTrace();
             log.error("SendEMail失败！", e);
+        } finally {
+            if (transport != null) {
+                try {
+                    transport.close();
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 
@@ -358,12 +375,17 @@ public class MailUtil {
         return message;
     }
 
-    private static Session getSession() {
+    public static Session getSession() {
         if (session == null) {
             session = Session.getInstance(getProperty(), getAuthenticator());
         }
         return session;
     }
+
+    public static Session getSession(MailAcount mailAcount) {
+        return createSession(mailAcount.getUsername(), mailAcount.getPassword(), mailAcount.getHost(), mailAcount.getPort(), mailAcount.getIsSsl());
+    }
+
 
     private static Properties getProperty() {
         if (properties == null) {
@@ -420,19 +442,19 @@ public class MailUtil {
 
         Properties props = new Properties();
         // 表示SMTP发送邮件，必须进行身份验证
-        props.setProperty("mail.smtp.auth", "true");
-        props.setProperty("mail.transport.protocol", "smtp");
-        props.setProperty("mail.smtp.host", host);
-        props.setProperty("mail.smtp.port", port);
-        props.setProperty("mail.user", username);
-        props.setProperty("mail.password", password);
-
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+        props.put("mail.user", username);
+        props.put("mail.password", password);
 
         // SMTP 服务器的端口 (非 SSL 连接的端口一般默认为 25, 可以不添加, 如果开启了 SSL 连接,
         //                  需要改为对应邮箱的 SMTP 服务器的端口, 具体可查看对应邮箱服务的帮助,
         //                  QQ邮箱的SMTP(SLL)端口为465或587, 其他邮箱自行去查看)
 
         if (ssl) {
+
             //使用SSL，企业邮箱必需
             //开启安全协议
             MailSSLSocketFactory sf = null;
@@ -444,9 +466,16 @@ public class MailUtil {
             }
             props.put("mail.smtp.ssl.enable", "true");
             props.put("mail.smtp.ssl.socketFactory", sf);
+
         }
 
-        return Session.getInstance(props, getAuthenticator(username, password));
+        return Session.getInstance(props, new Authenticator() {
+            //此访求返回用户和密码的对象
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
     }
 
 
