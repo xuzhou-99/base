@@ -56,16 +56,53 @@ public class MailUtil {
      * @param mailBody       邮件内容
      * @param senderNickName 发件人NickName
      * @param receiverUser   收件人地址
+     * @param isHtmlFormat   Html格式
+     */
+    public static void sendEmail(String subject, String mailBody, String senderNickName,
+                                 String receiverUser,
+                                 Boolean isHtmlFormat) {
+        sendEmail(subject, mailBody, senderNickName, emailConfig.getUsername(),
+                receiverUser, null, null,
+                isHtmlFormat, null);
+    }
+
+    /**
+     * Send E-mail
+     *
+     * @param subject        主题
+     * @param mailBody       邮件内容
+     * @param senderNickName 发件人NickName
+     * @param receiverUser   收件人地址
+     * @param isHtmlFormat   Html格式
+     * @param files          附件列表
+     */
+    public static void sendEmail(String subject, String mailBody, String senderNickName,
+                                 String receiverUser,
+                                 Boolean isHtmlFormat, File... files) {
+        sendEmail(subject, mailBody, senderNickName, emailConfig.getUsername(),
+                receiverUser, null, null,
+                isHtmlFormat, files);
+    }
+
+    /**
+     * Send E-mail
+     *
+     * @param subject        主题
+     * @param mailBody       邮件内容
+     * @param senderNickName 发件人NickName
+     * @param receiverUser   收件人地址
      * @param ccReceiveUser  抄送地址
      * @param bccReceiveUser 密送地址
      * @param isHtmlFormat   Html格式
      * @param files          附件列表
      */
-    public static void sendEmail(String subject, String mailBody, String senderNickName, String receiverUser, String fromUser,
-                                 String ccReceiveUser, String bccReceiveUser, Boolean isHtmlFormat, File... files) {
+    public static void sendEmail(String subject, String mailBody, String senderNickName,
+                                 String receiverUser, String ccReceiveUser, String bccReceiveUser,
+                                 Boolean isHtmlFormat, File... files) {
 
-        Session session = getSession();
-        sendEmail(session, subject, mailBody, senderNickName, fromUser, receiverUser, ccReceiveUser, bccReceiveUser, isHtmlFormat, files);
+        sendEmail(subject, mailBody, senderNickName, emailConfig.getUsername(),
+                receiverUser, ccReceiveUser, bccReceiveUser,
+                isHtmlFormat, files);
     }
 
     /**
@@ -79,12 +116,36 @@ public class MailUtil {
      * @param bccReceiveUser 密送地址
      * @param isHtmlFormat   Html格式
      */
-    public static void sendEmail(String subject, String mailBody, String senderNickName, String fromUser, String receiverUser,
-                                 String ccReceiveUser, String bccReceiveUser, Boolean isHtmlFormat) {
-
-        Session session = Session.getInstance(getProperty(), getAuthenticator());
-        sendEmail(session, subject, mailBody, senderNickName, fromUser, receiverUser, ccReceiveUser, bccReceiveUser, isHtmlFormat, null);
+    public static void sendEmail(String subject, String mailBody, String senderNickName, String fromUser,
+                                 String receiverUser, String ccReceiveUser, String bccReceiveUser,
+                                 Boolean isHtmlFormat) {
+        sendEmail(subject, mailBody, senderNickName, fromUser,
+                receiverUser, ccReceiveUser, bccReceiveUser,
+                isHtmlFormat, null);
     }
+
+    /**
+     * Send E-mail
+     *
+     * @param subject        主题
+     * @param mailBody       邮件内容
+     * @param senderNickName 发件人NickName
+     * @param receiverUser   收件人地址
+     * @param ccReceiveUser  抄送地址
+     * @param bccReceiveUser 密送地址
+     * @param isHtmlFormat   Html格式
+     * @param files          附件列表
+     */
+    public static void sendEmail(String subject, String mailBody, String senderNickName, String fromUser,
+                                 String receiverUser, String ccReceiveUser, String bccReceiveUser,
+                                 Boolean isHtmlFormat, File... files) {
+
+        Session session = getSession();
+        sendEmail(session, subject, mailBody, senderNickName, fromUser,
+                receiverUser, ccReceiveUser, bccReceiveUser,
+                isHtmlFormat, files);
+    }
+
 
     /**
      * Send E-mail
@@ -95,10 +156,12 @@ public class MailUtil {
      * @param receiverUser   收件人地址
      * @param isHtmlFormat   Html格式
      */
-    public static void sendEmail(Session session, String subject, String mailBody,
-                                 String senderNickName, String fromUser, String receiverUser,
+    public static void sendEmail(Session session, String subject, String mailBody, String senderNickName, String fromUser,
+                                 String receiverUser,
                                  Boolean isHtmlFormat) {
-        sendEmail(session, subject, mailBody, senderNickName, fromUser, receiverUser, null, null, isHtmlFormat, null);
+        sendEmail(session, subject, mailBody, senderNickName, fromUser,
+                receiverUser, null, null,
+                isHtmlFormat, null);
     }
 
     /**
@@ -115,7 +178,9 @@ public class MailUtil {
     public static void sendEmail(Session session, String subject, String mailBody, String senderNickName, String fromUser,
                                  String receiverUser, String ccReceiveUser, String bccReceiveUser,
                                  Boolean isHtmlFormat) {
-        sendEmail(session, subject, mailBody, senderNickName, fromUser, receiverUser, ccReceiveUser, bccReceiveUser, isHtmlFormat, null);
+        sendEmail(session, subject, mailBody, senderNickName, fromUser,
+                receiverUser, ccReceiveUser, bccReceiveUser,
+                isHtmlFormat, null);
     }
 
     /**
@@ -131,8 +196,9 @@ public class MailUtil {
      * @param isHtmlFormat   Html格式
      * @param files          附件列表
      */
-    public static void sendEmail(Session session, String subject, String mailBody, String senderNickName, String fromUser, String receiverUser,
-                                 String ccReceiveUser, String bccReceiveUser, Boolean isHtmlFormat, File... files) {
+    public static void sendEmail(Session session, String subject, String mailBody, String senderNickName, String fromUser,
+                                 String receiverUser, String ccReceiveUser, String bccReceiveUser,
+                                 Boolean isHtmlFormat, File... files) {
 
 
         try (Transport transport = session.getTransport()) {
@@ -151,8 +217,8 @@ public class MailUtil {
     }
 
 
-    private static MimeMessage buildMessage(Session session, String subject, String mailBody, String senderNickName,
-                                            String fromUser, String receiverUser, String ccReceiveUser, String bccReceiveUser,
+    private static MimeMessage buildMessage(Session session, String subject, String mailBody, String senderNickName, String fromUser,
+                                            String receiverUser, String ccReceiveUser, String bccReceiveUser,
                                             Boolean isHtmlFormat, File... files) throws MessagingException, UnsupportedEncodingException {
 
         MimeMessage message = new MimeMessage(session);
