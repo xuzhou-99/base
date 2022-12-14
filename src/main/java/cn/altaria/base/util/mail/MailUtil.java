@@ -42,7 +42,7 @@ public class MailUtil {
 
     static {
         emailConfig = new EmailConfig();
-        session = Session.getInstance(getProperty(), getAuthenticator());
+        session = getSession();
     }
 
     private MailUtil() {
@@ -61,7 +61,8 @@ public class MailUtil {
     public static void sendEmail(String subject, String mailBody, String senderNickName,
                                  String receiverUser,
                                  Boolean isHtmlFormat) {
-        sendEmail(subject, mailBody, senderNickName, emailConfig.getUsername(),
+        Session session = getSession();
+        sendEmail(session, subject, mailBody, senderNickName, emailConfig.getUsername(),
                 receiverUser, null, null,
                 isHtmlFormat, null);
     }
@@ -79,7 +80,8 @@ public class MailUtil {
     public static void sendEmail(String subject, String mailBody, String senderNickName,
                                  String receiverUser,
                                  Boolean isHtmlFormat, File... files) {
-        sendEmail(subject, mailBody, senderNickName, emailConfig.getUsername(),
+        Session session = getSession();
+        sendEmail(session, subject, mailBody, senderNickName, emailConfig.getUsername(),
                 receiverUser, null, null,
                 isHtmlFormat, files);
     }
@@ -99,8 +101,8 @@ public class MailUtil {
     public static void sendEmail(String subject, String mailBody, String senderNickName,
                                  String receiverUser, String ccReceiveUser, String bccReceiveUser,
                                  Boolean isHtmlFormat, File... files) {
-
-        sendEmail(subject, mailBody, senderNickName, emailConfig.getUsername(),
+        Session session = getSession();
+        sendEmail(session, subject, mailBody, senderNickName, emailConfig.getUsername(),
                 receiverUser, ccReceiveUser, bccReceiveUser,
                 isHtmlFormat, files);
     }
@@ -119,7 +121,8 @@ public class MailUtil {
     public static void sendEmail(String subject, String mailBody, String senderNickName, String fromUser,
                                  String receiverUser, String ccReceiveUser, String bccReceiveUser,
                                  Boolean isHtmlFormat) {
-        sendEmail(subject, mailBody, senderNickName, fromUser,
+        Session session = getSession();
+        sendEmail(session, subject, mailBody, senderNickName, fromUser,
                 receiverUser, ccReceiveUser, bccReceiveUser,
                 isHtmlFormat, null);
     }
@@ -200,15 +203,12 @@ public class MailUtil {
                                  String receiverUser, String ccReceiveUser, String bccReceiveUser,
                                  Boolean isHtmlFormat, File... files) {
 
-
-        try (Transport transport = session.getTransport()) {
-            MimeMessage message = buildMessage(session, subject, mailBody, senderNickName, fromUser,
+        try {
+            MimeMessage message = createMessage(session, subject, mailBody, senderNickName, fromUser,
                     receiverUser, ccReceiveUser, bccReceiveUser, isHtmlFormat, files);
+            sendEmail(session, message);
 
-            transport.connect();
-            transport.sendMessage(message, message.getAllRecipients());
-
-            log.info("{} 向 {} 发送邮件成功！", emailConfig.getUsername(), receiverUser);
+            log.info("{} 向 {} 发送邮件成功！", fromUser, receiverUser);
 
         } catch (UnsupportedEncodingException | MessagingException e) {
             e.printStackTrace();
@@ -216,8 +216,46 @@ public class MailUtil {
         }
     }
 
+    /**
+     * Send E-mail
+     *
+     * @param session 邮件session
+     * @param message 邮件
+     */
+    public static void sendEmail(Session session, Message message) {
 
-    private static MimeMessage buildMessage(Session session, String subject, String mailBody, String senderNickName, String fromUser,
+        try (Transport transport = session.getTransport()) {
+
+            transport.connect();
+            transport.sendMessage(message, message.getAllRecipients());
+
+            log.info("发送邮件成功！");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            log.error("SendEMail失败！", e);
+        }
+    }
+
+
+    /**
+     * 创建邮件消息
+     *
+     * @param session        session
+     * @param subject        邮件主题
+     * @param mailBody       邮件内容
+     * @param senderNickName 发送人名称
+     * @param fromUser       发送人邮箱
+     * @param receiverUser   接收人邮箱
+     * @param ccReceiveUser  抄送人邮箱
+     * @param bccReceiveUser 密送人邮箱
+     * @param isHtmlFormat   是否html
+     * @param files          文件列表
+     * @return 邮件
+     * @throws MessagingException           创建邮件异常
+     * @throws UnsupportedEncodingException 发送人名称编码异常
+     */
+    public static MimeMessage createMessage(Session session, String subject, String mailBody, String senderNickName, String fromUser,
                                             String receiverUser, String ccReceiveUser, String bccReceiveUser,
                                             Boolean isHtmlFormat, File... files) throws MessagingException, UnsupportedEncodingException {
 
@@ -317,6 +355,12 @@ public class MailUtil {
         return message;
     }
 
+    private static Session getSession() {
+        if (session == null) {
+            session = Session.getInstance(getProperty(), getAuthenticator());
+        }
+        return session;
+    }
 
     private static Properties getProperty() {
         if (properties == null) {
@@ -353,14 +397,23 @@ public class MailUtil {
     }
 
 
-    private static Session getSession() {
-        if (session == null) {
-            session = Session.getInstance(getProperty(), getAuthenticator());
-        }
-        return session;
+    public static Session createSession(String username, String password, String host, String port) {
+        return createSession(username, password, host, port, false);
     }
 
-    public static Session buildSession(String username, String password, String host, String port) {
+    /**
+     * PS: 某些邮箱服务器要求 SMTP 连接需要使用 SSL 安全认证 (为了提高安全性, 邮箱支持SSL连接, 也可以自己开启),
+     * 如果无法连接邮件服务器, 仔细查看控制台打印的 log, 如果有有类似 “连接失败, 要求 SSL 安全连接” 等错误,
+     * 则开启 SSL 安全连接。
+     *
+     * @param username 邮箱
+     * @param password 密码/授权码
+     * @param host     服务器地址
+     * @param port     端口
+     * @param ssl      是否开启ssl
+     * @return 连接session
+     */
+    public static Session createSession(String username, String password, String host, String port, boolean ssl) {
 
         Properties props = new Properties();
         // 表示SMTP发送邮件，必须进行身份验证
@@ -371,24 +424,16 @@ public class MailUtil {
         props.setProperty("mail.user", username);
         props.setProperty("mail.password", password);
 
-        props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.setProperty("mail.smtp.socketFactory.fallback", "false");
-        props.setProperty("mail.smtp.socketFactory.port", port);
 
-        // PS: 某些邮箱服务器要求 SMTP 连接需要使用 SSL 安全认证 (为了提高安全性, 邮箱支持SSL连接, 也可以自己开启),
-        //     如果无法连接邮件服务器, 仔细查看控制台打印的 log, 如果有有类似 “连接失败, 要求 SSL 安全连接” 等错误,
-        //     打开下面 /* ... */ 之间的注释代码, 开启 SSL 安全连接。
-        /*
         // SMTP 服务器的端口 (非 SSL 连接的端口一般默认为 25, 可以不添加, 如果开启了 SSL 连接,
         //                  需要改为对应邮箱的 SMTP 服务器的端口, 具体可查看对应邮箱服务的帮助,
         //                  QQ邮箱的SMTP(SLL)端口为465或587, 其他邮箱自行去查看)
-        final String smtpPort = "465";
-        props.setProperty("mail.smtp.port", smtpPort);
-        props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.setProperty("mail.smtp.socketFactory.fallback", "false");
-        props.setProperty("mail.smtp.socketFactory.port", smtpPort);
-        */
 
+        if (ssl) {
+            props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            props.setProperty("mail.smtp.socketFactory.fallback", "false");
+            props.setProperty("mail.smtp.socketFactory.port", port);
+        }
 
         return Session.getInstance(props, getAuthenticator(username, password));
     }
